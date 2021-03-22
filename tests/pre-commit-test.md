@@ -1,3 +1,5 @@
-# Test file
+# Basic test
 
-add your syntax here
+[google](https://google.com)
+[local]({filename}/a/file)
+[tag]({tag}funny_tag)

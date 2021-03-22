@@ -17,8 +17,31 @@ Some *markdown*
 .
 Some *markdown*
 
-* a
-* b
+- a
+- b
 
-- c
+* c
+.
+
+
+Test links
+.
+[google](https://google.com)
+[local]({filename}/a/file)
+[tag]({tag}funny_tag)
+.
+[google](https://google.com)
+[local]({filename}/a/file)
+[tag]({tag}funny_tag)
+.
+
+Test Image references
+.
+![google](https://google.com)
+![local]({filename}/a/file)
+![tag]({tag}funny_tag)
+.
+![google](https://google.com)
+![local]({filename}/a/file)
+![tag]({tag}funny_tag)
 .
