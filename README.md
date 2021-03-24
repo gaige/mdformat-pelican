@@ -3,13 +3,13 @@
 [![Build Status][ci-badge]][ci-link]
 [![PyPI version][pypi-badge]][pypi-link]
 
-An [mdformat](https://github.com/executablebooks/mdformat) plugin for the pelican static site generator. 
-[Pelican](https://getpelican.com) is a static site generator and uses markdown with a couple of additions, 
+An [mdformat](https://github.com/executablebooks/mdformat) plugin for the pelican static site generator.
+[Pelican](https://getpelican.com) is a static site generator and uses markdown with a couple of additions,
 namely the ability to reference:
 
 - tag
 - author
-- category 
+- category
 - index
 - filename
 - static

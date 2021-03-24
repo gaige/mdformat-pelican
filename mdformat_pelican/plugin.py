@@ -2,8 +2,7 @@ from typing import List, Optional, Tuple
 
 from markdown_it import MarkdownIt
 from markdown_it.token import Token
-from mdformat.renderer import MARKERS, MDRenderer
-from mdit_py_plugins.footnote import footnote_plugin
+from mdformat.renderer import MDRenderer
 
 
 def update_mdit(mdit: MarkdownIt) -> None:
@@ -15,13 +14,22 @@ def replace_pelican_placeholdlers(uri_key, attr_list):
     for a in attr_list:
         if a[0] == uri_key:
             new_url = a[1]
-            for placeholder in ('author', 'category', 'index', 'tag', 'filename', 'static', 'attach'):
-                new_url = new_url.replace("%7B" + placeholder + "%7D", '{' + placeholder + '}')
-                new_url = new_url.replace("%7C" + placeholder + "%7C", '{' + placeholder + '}')
+            for placeholder in (
+                "author",
+                "category",
+                "index",
+                "tag",
+                "filename",
+                "static",
+                "attach",
+            ):
+                new_url = new_url.replace("%7B" + placeholder + "%7D", "{" + placeholder + "}")
+                new_url = new_url.replace("%7C" + placeholder + "%7C", "{" + placeholder + "}")
             new_attrs += [[uri_key, new_url]]
         else:
             new_attrs += [a]
     return new_attrs
+
 
 def render_token(
     renderer: MDRenderer,
@@ -35,10 +43,10 @@ def render_token(
     :returns: (text, index) where index is of the final "consumed" token
     """
     token = tokens[index]
-    if token.type == 'link_open':
-        token.attrs = replace_pelican_placeholdlers('href', token.attrs)
+    if token.type == "link_open":
+        token.attrs = replace_pelican_placeholdlers("href", token.attrs)
         return None
-    elif token.type == 'image':
-        token.attrs = replace_pelican_placeholdlers('src', token.attrs)
+    elif token.type == "image":
+        token.attrs = replace_pelican_placeholdlers("src", token.attrs)
         return None
     return None

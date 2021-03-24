@@ -47,3 +47,6 @@ known_first_party = ["mdformat_pelican", "tests"]
 
 # Settings for Black compatibility
 profile = "black"
+
+[tool.black]
+line-length = 119
