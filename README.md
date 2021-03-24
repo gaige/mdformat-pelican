@@ -4,7 +4,20 @@
 [![codecov.io][cov-badge]][cov-link]
 [![PyPI version][pypi-badge]][pypi-link]
 
-An [mdformat](https://github.com/executablebooks/mdformat) plugin for...
+An [mdformat](https://github.com/executablebooks/mdformat) plugin for the pelican static site generator. 
+[Pelican](https://getpelican.com) is a static site generator and uses markdown with a couple of additions, 
+namely the ability to reference:
+
+- tag
+- author
+- category 
+- index
+- filename
+- static
+- attach
+
+Note that the `{_name_}` forms are supported, but the `|_name_|` forms are not. 
+
 
 ## Development
 
@@ -62,9 +75,7 @@ or trigger the GitHub Action job, by creating a release with a tag equal to the 
 
 Note, this requires generating an API key on PyPi and adding it to the repository `Settings/Secrets`, under the name `PYPI_KEY`.
 
-[ci-badge]: https://github.com/executablebooks/mdformat-plugin/workflows/CI/badge.svg?branch=master
-[ci-link]: https://github.com/executablebooks/mdformat/actions?query=workflow%3ACI+branch%3Amaster+event%3Apush
-[cov-badge]: https://codecov.io/gh/executablebooks/mdformat-plugin/branch/master/graph/badge.svg
-[cov-link]: https://codecov.io/gh/executablebooks/mdformat-plugin
-[pypi-badge]: https://img.shields.io/pypi/v/mdformat-plugin.svg
-[pypi-link]: https://pypi.org/project/mdformat-plugin
+[ci-badge]: https://github.com/gaige/mdformat_pelican/workflows/CI/badge.svg?branch=master
+[ci-link]: https://github.com/gaige/mdformat_pelican/actions?query=workflow%3ACI+branch%3Amaster+event%3Apush
+[pypi-badge]: https://img.shields.io/pypi/v/mdformat_pelican.svg
+[pypi-link]: https://pypi.org/project/mdformat_pelican
