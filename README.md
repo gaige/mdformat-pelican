@@ -1,7 +1,6 @@
 # mdformat-plugin
 
 [![Build Status][ci-badge]][ci-link]
-[![codecov.io][cov-badge]][cov-link]
 [![PyPI version][pypi-badge]][pypi-link]
 
 An [mdformat](https://github.com/executablebooks/mdformat) plugin for the pelican static site generator. 
@@ -16,7 +15,8 @@ namely the ability to reference:
 - static
 - attach
 
-Note that the `{_name_}` forms are supported, but the `|_name_|` forms are not. 
+Note that the `{name}` forms are supported, and the `|name|` forms are converted to the newer form,
+as the pipe form has been deprecated.
 
 
 ## Development
@@ -75,7 +75,7 @@ or trigger the GitHub Action job, by creating a release with a tag equal to the 
 
 Note, this requires generating an API key on PyPi and adding it to the repository `Settings/Secrets`, under the name `PYPI_KEY`.
 
-[ci-badge]: https://github.com/gaige/mdformat_pelican/workflows/CI/badge.svg?branch=master
-[ci-link]: https://github.com/gaige/mdformat_pelican/actions?query=workflow%3ACI+branch%3Amaster+event%3Apush
+[ci-badge]: https://github.com/gaige/mdformat-pelican/workflows/CI/badge.svg?branch=master
+[ci-link]: https://github.com/gaige/mdformat-pelican/actions?query=workflow%3ACI+branch%3Amaster+event%3Apush
 [pypi-badge]: https://img.shields.io/pypi/v/mdformat_pelican.svg
 [pypi-link]: https://pypi.org/project/mdformat_pelican

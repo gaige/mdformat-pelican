@@ -45,3 +45,15 @@ Test Image references
 ![local]({filename}/a/file)
 ![tag]({tag}funny_tag)
 .
+
+
+Test fix old references
+.
+![google](https://google.com)
+![local](|filename|/a/file)
+![tag](|tag|funny_tag)
+.
+![google](https://google.com)
+![local]({filename}/a/file)
+![tag]({tag}funny_tag)
+.

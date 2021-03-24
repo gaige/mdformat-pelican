@@ -17,6 +17,7 @@ def replace_pelican_placeholdlers(uri_key, attr_list):
             new_url = a[1]
             for placeholder in ('author', 'category', 'index', 'tag', 'filename', 'static', 'attach'):
                 new_url = new_url.replace("%7B" + placeholder + "%7D", '{' + placeholder + '}')
+                new_url = new_url.replace("%7C" + placeholder + "%7C", '{' + placeholder + '}')
             new_attrs += [[uri_key, new_url]]
         else:
             new_attrs += [a]
