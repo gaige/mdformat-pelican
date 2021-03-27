@@ -9,26 +9,20 @@ def update_mdit(mdit: MarkdownIt) -> None:
     """Update the parser, e.g. by adding a plugin: `mdit.use(myplugin)`"""
 
 
-def replace_pelican_placeholdlers(uri_key, attr_list):
-    new_attrs = []
-    for a in attr_list:
-        if a[0] == uri_key:
-            new_url = a[1]
-            for placeholder in (
-                "author",
-                "category",
-                "index",
-                "tag",
-                "filename",
-                "static",
-                "attach",
-            ):
-                new_url = new_url.replace("%7B" + placeholder + "%7D", "{" + placeholder + "}")
-                new_url = new_url.replace("%7C" + placeholder + "%7C", "{" + placeholder + "}")
-            new_attrs += [[uri_key, new_url]]
-        else:
-            new_attrs += [a]
-    return new_attrs
+def replace_pelican_placeholdlers(original_url) -> str:
+    new_url = original_url
+    for placeholder in (
+        "author",
+        "category",
+        "index",
+        "tag",
+        "filename",
+        "static",
+        "attach",
+    ):
+        new_url = new_url.replace("%7B" + placeholder + "%7D", "{" + placeholder + "}")
+        new_url = new_url.replace("%7C" + placeholder + "%7C", "{" + placeholder + "}")
+    return new_url
 
 
 def render_token(
@@ -44,9 +38,9 @@ def render_token(
     """
     token = tokens[index]
     if token.type == "link_open":
-        token.attrs = replace_pelican_placeholdlers("href", token.attrs)
+        token.attrSet("href", replace_pelican_placeholdlers(token.attrGet("href")))
         return None
     elif token.type == "image":
-        token.attrs = replace_pelican_placeholdlers("src", token.attrs)
+        token.attrSet("src", replace_pelican_placeholdlers(token.attrGet("src")))
         return None
     return None
