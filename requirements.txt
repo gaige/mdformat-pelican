@@ -1,4 +1,4 @@
 flit
 tox
 pytest
-mdformat
+mdformat<0.6.0

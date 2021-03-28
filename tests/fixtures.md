@@ -83,3 +83,29 @@ Date: 2021-03-28 05:38
 ![local]({filename}/a/file)
 ![tag]({tag}funny_tag)
 .
+
+Test with quotable
+.
+Title: a title [more]
+
+This is the input Markdown test,
+then below add the expected output.
+.
+Title: a title [more]
+
+This is the input Markdown test,
+then below add the expected output.
+.
+
+Test with quote
+.
+Title: a title a`quote 'quote "quote"
+
+This is the input Markdown test,
+then below add the expected output.
+.
+Title: a title a`quote 'quote "quote"
+
+This is the input Markdown test,
+then below add the expected output.
+.
