@@ -5,7 +5,7 @@
 
 An [mdformat](https://github.com/executablebooks/mdformat) plugin for the pelican static site generator.
 [Pelican](https://getpelican.com) is a static site generator and uses markdown with a couple of additions,
-namely the ability to reference:
+namely skipping the K:V pairs at the start and the ability to reference:
 
 - tag
 - author
