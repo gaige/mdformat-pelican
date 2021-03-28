@@ -28,9 +28,6 @@ def make_front_matter_rule():
         if start_line != 0:
             return False
 
-        start = state.bMarks[start_line]  # + state.tShift[startLine] no tab shift allowed
-        maximum = state.eMarks[start_line]
-
         # Since start is found, we can report success here in validation mode
         # if silent:
         #    return True
@@ -54,7 +51,7 @@ def make_front_matter_rule():
                 break
 
             key_value = state.src[start:maximum].split(":", 1)
-            if key_value != 2:
+            if len(key_value) != 2:
                 # Error here, we have no k/v separator
                 return False
             meta[key_value[0].lower()] = key_value[1]
