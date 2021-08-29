@@ -1,11 +1,10 @@
-from typing import List, Optional, Tuple
+from typing import Mapping
 
 from markdown_it import MarkdownIt
 from markdown_it.rules_block import StateBlock
-from markdown_it.token import Token
-from mdformat.renderer import MDRenderer
-
-# from mdformat.renderer import LOGGER, MDRenderer
+from mdformat import renderer
+from mdformat.renderer import RenderContext, RenderTreeNode
+from mdformat.renderer.typing import Render
 
 
 def update_mdit(mdit: MarkdownIt) -> None:
@@ -13,17 +12,17 @@ def update_mdit(mdit: MarkdownIt) -> None:
     Skip pairs before the first empty line
     """
 
-    frontMatter = make_front_matter_rule()
+    front_matter = make_front_matter_rule()
     mdit.block.ruler.before(
         "table",
         "front_matter",
-        frontMatter,
+        front_matter,
         {"alt": ["paragraph", "reference", "blockquote", "list"]},
     )
 
 
 def make_front_matter_rule():
-    def frontMatter(state: StateBlock, start_line: int, end_line: int, silent: bool):
+    def front_matter(state: StateBlock, start_line: int, end_line: int, silent: bool):
         # grab initial data if it's : separated
         if start_line != 0:
             return False
@@ -77,7 +76,7 @@ def make_front_matter_rule():
 
         return True
 
-    return frontMatter
+    return front_matter
 
 
 def replace_pelican_placeholdlers(original_url) -> str:
@@ -96,26 +95,22 @@ def replace_pelican_placeholdlers(original_url) -> str:
     return new_url
 
 
-def render_token(
-    renderer: MDRenderer,
-    tokens: List[Token],
-    index: int,
-    options: dict,
-    env: dict,
-) -> Optional[Tuple[str, int]]:
-    """Convert token(s) to a string, or return None if no render method available.
+def _pelican_frontmatter_renderer(node: RenderTreeNode, context: RenderContext) -> str:
+    return node.content.rstrip()
 
-    :returns: (text, index) where index is of the final "consumed" token
-    """
-    token = tokens[index]
-    if token.type == "pelican_frontmatter":
-        # if 'title' not in token.meta:
-        #    LOGGER.warning("Required title missing from front matter")
-        return token.content + "\n", index
-    elif token.type == "link_open":
-        token.attrSet("href", replace_pelican_placeholdlers(token.attrGet("href")))
-        return None
-    elif token.type == "image":
-        token.attrSet("src", replace_pelican_placeholdlers(token.attrGet("src")))
-        return None
-    return None
+
+def _pelican_image_renderer(node: RenderTreeNode, context: RenderContext) -> str:
+    node.attrs["src"] = replace_pelican_placeholdlers(node.attrs["src"])
+    return renderer.DEFAULT_RENDERERS.get("image")(node, context)
+
+
+def _pelican_link_open_renderer(node: RenderTreeNode, context: RenderContext) -> str:
+    node.attrs["href"] = replace_pelican_placeholdlers(node.attrs["href"])
+    return renderer.DEFAULT_RENDERERS.get("link")(node, context)
+
+
+RENDERERS: Mapping[str, Render] = {
+    "pelican_frontmatter": _pelican_frontmatter_renderer,
+    "link": _pelican_link_open_renderer,
+    "image": _pelican_image_renderer,
+}
