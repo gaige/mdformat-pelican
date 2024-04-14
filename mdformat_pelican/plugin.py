@@ -79,9 +79,18 @@ def make_front_matter_rule():
     return front_matter
 
 
-def replace_pelican_placeholdlers(original_url) -> str:
-    new_url = original_url
-    for placeholder in (
+def _pelican_frontmatter_renderer(node: RenderTreeNode, context: RenderContext) -> str:
+    return node.content.rstrip()
+
+
+# Precompute the pelican placeholders to avoid doing it on every render.
+# Supports both the standard curly braces and the deprecated pipe characters as delimiters:
+# - %7B -> {
+# - %7D -> }
+# - %7C -> |
+PLACEHOLDERS: [str, str] = {
+    start + keyword + end: "{" + keyword + "}"
+    for keyword in (
         "author",
         "category",
         "index",
@@ -89,14 +98,16 @@ def replace_pelican_placeholdlers(original_url) -> str:
         "filename",
         "static",
         "attach",
-    ):
-        new_url = new_url.replace("%7B" + placeholder + "%7D", "{" + placeholder + "}")
-        new_url = new_url.replace("%7C" + placeholder + "%7C", "{" + placeholder + "}")
+    )
+    for start, end in (("%7B", "%7D"), ("%7C", "%7C"))
+}
+
+
+def replace_pelican_placeholdlers(original_url: str) -> str:
+    new_url = original_url
+    for placeholder, replacement in PLACEHOLDERS.items():
+        new_url = new_url.replace(placeholder, replacement)
     return new_url
-
-
-def _pelican_frontmatter_renderer(node: RenderTreeNode, context: RenderContext) -> str:
-    return node.content.rstrip()
 
 
 def _pelican_image_renderer(node: RenderTreeNode, context: RenderContext) -> str:
@@ -111,6 +122,29 @@ def _pelican_link_open_renderer(node: RenderTreeNode, context: RenderContext) ->
 
 RENDERERS: Mapping[str, Render] = {
     "pelican_frontmatter": _pelican_frontmatter_renderer,
-    "link": _pelican_link_open_renderer,
     "image": _pelican_image_renderer,
 }
+
+
+# XXX mdformat-pelican and mdformat-gfm plugins are not compatible. See:
+# https://github.com/hukkin/mdformat-gfm/issues/38
+# https://github.com/gaige/mdformat-pelican/issues/3
+# So we're going to monkey-patch mdformat_gfm's link rendering.
+try:
+    import mdformat_gfm
+
+    def _patch_gfm_link_renderer(node: RenderTreeNode, context: RenderContext) -> str:
+        """Patched link renderer that replaces pelican placeholders in link's href."""
+        if any(
+            (bad_placeholder in node.attrs["href"]) for bad_placeholder in PLACEHOLDERS
+        ):
+            node.attrs["href"] = replace_pelican_placeholdlers(node.attrs["href"])
+        # Use the original renderer.
+        return mdformat_gfm.plugin._link_renderer(node, context)
+
+    # Use our patched renderer instead of mdfomat_gfm's.
+    mdformat_gfm.plugin.RENDERERS["link"] = _patch_gfm_link_renderer
+
+# Register the link renderer the usual way if the gfm plugin is not installed.
+except ImportError:
+    RENDERERS["link"] = _pelican_link_open_renderer
