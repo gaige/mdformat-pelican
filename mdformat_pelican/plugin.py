@@ -135,9 +135,7 @@ try:
 
     def _patch_gfm_link_renderer(node: RenderTreeNode, context: RenderContext) -> str:
         """Patched link renderer that replaces pelican placeholders in link's href."""
-        if any(
-            (bad_placeholder in node.attrs["href"]) for bad_placeholder in PLACEHOLDERS
-        ):
+        if any((bad_placeholder in node.attrs["href"]) for bad_placeholder in PLACEHOLDERS):
             node.attrs["href"] = replace_pelican_placeholdlers(node.attrs["href"])
         # Use the original renderer.
         return mdformat_gfm.plugin._link_renderer(node, context)
