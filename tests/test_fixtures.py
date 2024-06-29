@@ -3,12 +3,9 @@ from pathlib import Path
 from markdown_it.utils import read_fixture_file
 import mdformat
 import pytest
+import sys
 
-try:
-  import mdformat_gfm
-  have_gfm = True
-except ImportError:
-  have_gfm = False
+have_gfm = 'mdformat_gfm' in sys.modules
 
 FIXTURE_PATH = Path(__file__).parent / "fixtures.md"
 fixtures = read_fixture_file(FIXTURE_PATH)
