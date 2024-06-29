@@ -144,5 +144,5 @@ try:
     mdformat_gfm.plugin.RENDERERS["link"] = _patch_gfm_link_renderer
 
 # Register the link renderer the usual way if the gfm plugin is not installed.
-except ImportError:
+except (ImportError,AttributeError) as e:
     RENDERERS["link"] = _pelican_link_open_renderer
