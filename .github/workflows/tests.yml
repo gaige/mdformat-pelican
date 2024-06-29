@@ -44,6 +44,11 @@ jobs:
       run: |
         pytest --cov=mdformat_pelican --cov-report=xml --cov-report=term-missing
 
+    - name: Run pytest with mdformat-gfm
+      run: |
+        pip install mdformat-gfm
+        pytest --cov=mdformat_pelican --cov-report=xml --cov-report=term-missing
+
   pre-commit-hook:
     runs-on: ubuntu-latest
 
