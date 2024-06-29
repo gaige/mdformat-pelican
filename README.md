@@ -1,7 +1,8 @@
 # mdformat-plugin
 
-[![Build Status][ci-badge]][ci-link]
-[![PyPI version][pypi-badge]][pypi-link]
+[![Build Status](https://img.shields.io/github/actions/workflow/status/gaige/mdformat-pelican/tests.yml?branch=main)](https://github.com/gaige/mdformat-pelican/actions)
+[![PyPI Version](https://img.shields.io/pypi/v/mdformat_pelican)](https://pypi.org/project/mdformat_pelican/)
+![License](https://img.shields.io/pypi/l/mdformat_pelican?color=blue)
 
 An [mdformat](https://github.com/executablebooks/mdformat) plugin for the pelican static site generator.
 [Pelican](https://getpelican.com) is a static site generator and uses markdown with a couple of additions,
@@ -72,10 +73,3 @@ flit publish
 ```
 
 or trigger the GitHub Action job, by creating a release with a tag equal to the version, e.g. `v0.0.1`.
-
-Note, this requires generating an API key on PyPi and adding it to the repository `Settings/Secrets`, under the name `PYPI_KEY`.
-
-[ci-badge]: https://github.com/gaige/mdformat-pelican/workflows/CI/badge.svg?branch=master
-[ci-link]: https://github.com/gaige/mdformat-pelican/actions?query=workflow%3ACI+branch%3Amaster+event%3Apush
-[pypi-badge]: https://img.shields.io/pypi/v/mdformat_pelican.svg
-[pypi-link]: https://pypi.org/project/mdformat_pelican
