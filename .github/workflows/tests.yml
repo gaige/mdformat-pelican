@@ -92,6 +92,8 @@ jobs:
     needs:
     - build
     - tests
+    - pre-commit
+    - pre-commit-hook
     runs-on: ubuntu-latest
     environment:
       name: pypi
