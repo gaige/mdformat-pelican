@@ -131,17 +131,19 @@ RENDERERS: Mapping[str, Render] = {
 # https://github.com/gaige/mdformat-pelican/issues/3
 # So we're going to monkey-patch mdformat_gfm's link rendering.
 try:
-    import mdformat_gfm
+    from mdformat_gfm import plugin
 
     def _patch_gfm_link_renderer(node: RenderTreeNode, context: RenderContext) -> str:
         """Patched link renderer that replaces pelican placeholders in link's href."""
-        if any((bad_placeholder in node.attrs["href"]) for bad_placeholder in PLACEHOLDERS):
+        if any(
+            (bad_placeholder in node.attrs["href"]) for bad_placeholder in PLACEHOLDERS
+        ):
             node.attrs["href"] = replace_pelican_placeholdlers(node.attrs["href"])
         # Use the original renderer.
-        return mdformat_gfm.plugin._link_renderer(node, context)
+        return plugin._link_renderer(node, context)
 
     # Use our patched renderer instead of mdfomat_gfm's.
-    mdformat_gfm.plugin.RENDERERS["link"] = _patch_gfm_link_renderer
+    plugin.RENDERERS["link"] = _patch_gfm_link_renderer
 
 # Register the link renderer the usual way if the gfm plugin is not installed.
 except ImportError:
