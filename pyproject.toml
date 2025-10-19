@@ -52,7 +52,7 @@ profile = "black"
 line-length = 119
 
 [tool.commitizen]
-version = "0.2.1"
+version = "0.2.2"
 tag_format = "v$major.$minor.$patch$prerelease"
 version_files = [
 	"mdformat_pelican/__init__.py:__version__"
