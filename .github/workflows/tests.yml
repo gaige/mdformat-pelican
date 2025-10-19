@@ -15,14 +15,14 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.9'  # 3.12 and possibly lower will fail flake8
+        python-version: '3.12'  # 3.12 and possibly lower will fail flake8
     - uses: pre-commit/action@v3.0.1
 
   tests:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python-version: ['3.8', '3.9','3.10','3.11','3.12']
+        python-version: ['3.10', '3.11', '3.12', '3.13']
         os: [ubuntu-latest, windows-latest]
 
     steps:
@@ -53,7 +53,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: "3.x"
+        python-version: "3.12"
 
     - name: Installation (deps and package)
       run: |
@@ -72,7 +72,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.x"
+          python-version: "3.12"
       - name: Upgrade Pip
         run: python -m pip install --upgrade pip
       - name: Install Poetry
