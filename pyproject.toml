@@ -16,9 +16,8 @@ classifiers = [
 ]
 keywords = "mdformat,markdown,markdown-it"
 
-requires-python=">=3.6"
-requires=["mdformat >=0.7.0,<0.8.0",
-            ]
+requires-python = ">= 3.10"
+requires = ["mdformat >= 1.0.0"]
 
 [tool.flit.metadata.requires-extra]
 test = [
@@ -52,7 +51,7 @@ profile = "black"
 line-length = 119
 
 [tool.commitizen]
-version = "0.2.2"
+version = "1.0.0"
 tag_format = "v$major.$minor.$patch$prerelease"
 version_files = [
 	"mdformat_pelican/__init__.py:__version__"
