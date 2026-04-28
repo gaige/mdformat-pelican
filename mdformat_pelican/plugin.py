@@ -1,10 +1,10 @@
-from typing import Mapping
+from typing import Any, Mapping
 
 from markdown_it import MarkdownIt
 from markdown_it.rules_block import StateBlock
 from mdformat import renderer
 from mdformat.renderer import RenderContext, RenderTreeNode
-from mdformat.renderer.typing import Render
+from mdformat.renderer.typing import Postprocess, Render
 
 
 def update_mdit(mdit: MarkdownIt) -> None:
@@ -115,9 +115,18 @@ def _pelican_image_renderer(node: RenderTreeNode, context: RenderContext) -> str
     return renderer.DEFAULT_RENDERERS.get("image")(node, context)
 
 
-def _pelican_link_open_renderer(node: RenderTreeNode, context: RenderContext) -> str:
-    node.attrs["href"] = replace_pelican_placeholdlers(node.attrs["href"])
-    return renderer.DEFAULT_RENDERERS.get("link")(node, context)
+# Replace Pelican placeholders in already-rendered link output, after the link
+# renderer has produced the final `[text](url)` string. Using a postprocessor
+# instead of overriding the link renderer avoids conflicts with other plugins
+# that also register a link renderer (e.g. mdformat-recover-urls), since
+# postprocessors are collaborative while only the first registered renderer
+# wins.
+def _pelican_link_postprocessor(
+    text: str,
+    node: RenderTreeNode,
+    context: Any,
+) -> str:
+    return replace_pelican_placeholdlers(text)
 
 
 RENDERERS: Mapping[str, Render] = {
@@ -125,24 +134,6 @@ RENDERERS: Mapping[str, Render] = {
     "image": _pelican_image_renderer,
 }
 
-
-# XXX mdformat-pelican and mdformat-gfm plugins are not compatible. See:
-# https://github.com/hukkin/mdformat-gfm/issues/38
-# https://github.com/gaige/mdformat-pelican/issues/3
-# So we're going to monkey-patch mdformat_gfm's link rendering.
-try:
-    from mdformat_gfm import plugin
-
-    def _patch_gfm_link_renderer(node: RenderTreeNode, context: RenderContext) -> str:
-        """Patched link renderer that replaces pelican placeholders in link's href."""
-        if any((bad_placeholder in node.attrs["href"]) for bad_placeholder in PLACEHOLDERS):
-            node.attrs["href"] = replace_pelican_placeholdlers(node.attrs["href"])
-        # Use the original renderer.
-        return plugin._link_renderer(node, context)
-
-    # Use our patched renderer instead of mdfomat_gfm's.
-    plugin.RENDERERS["link"] = _patch_gfm_link_renderer
-
-# Register the link renderer the usual way if the gfm plugin is not installed.
-except ImportError:
-    RENDERERS["link"] = _pelican_link_open_renderer
+POSTPROCESSORS: Mapping[str, Postprocess] = {
+    "link": _pelican_link_postprocessor,
+}
